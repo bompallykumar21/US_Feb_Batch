@@ -1,5 +1,12 @@
 # Compiled class file
 *.class
+test-output/*
+target/*
+.classpath
+.project
+.settings/*
+_classpath.xml
+_project.xml
 
 # Log file
 *.log
