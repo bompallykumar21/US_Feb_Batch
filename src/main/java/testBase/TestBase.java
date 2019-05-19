@@ -20,8 +20,20 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
+
 public class TestBase extends commonObjects{
 
+	@BeforeSuite
+	public void beforeSuite() throws IOException {
+		System.out.println("############BeforeSuite##########");
+		initializelog4j();
+		initializeProperties();
+		initializeExtentReports();
+	}
+	
 	public static void initializelog4j() {
 		String log4jConfPath = "log4j.properties";
 		PropertyConfigurator.configure(log4jConfPath);
@@ -30,7 +42,7 @@ public class TestBase extends commonObjects{
 	}
 
 	public void initializeProperties() throws IOException {
-		Properties prpt=new Properties();
+		prpt=new Properties();
 		File file1=new File("./config/configuration.properties");  //locating configuration file
 		File file2=new File("./config/configuration2.properties");
 		log.info("Configuration file is located"+file1);
@@ -49,17 +61,33 @@ public class TestBase extends commonObjects{
 		env=prpt.getProperty("environment");
 		url=prpt.getProperty("url");
 	}
-
-	@BeforeSuite
-	public void beforeSuite() throws IOException {
-		System.out.println("############BeforeSuite##########");
-		initializelog4j();
-		initializeProperties();
+	
+	public void initializeExtentReports() {
+		String extentReportPath=System.getProperty("user.dir")+"/ExtentReports/"+"Report1.html";
+		extentReports=new ExtentReports();
+		extentHtmlReporter=new ExtentHtmlReporter(extentReportPath);
+		extentHtmlReporter.loadXMLConfig(System.getProperty("user.dir")+"/config/ExtentReportConfig.xml");
+		extentReports.attachReporter(extentHtmlReporter); 
+		extentReports.setSystemInfo("Environment",  prpt.getProperty("environment"));
+		extentReports.setSystemInfo("Author Name", "Vijay");
+		extentReports.setSystemInfo("Release", prpt.getProperty("release"));
+		extentReports.setSystemInfo("Project Name", "Selenium Training");
+		extentReports.setSystemInfo("Executor", "Arun");
+		extentReports.setSystemInfo("Reviewer", "Gopi");
+//		extentTest=extentReports.createTest("TestCase1");   //creating test case to enter log details pass/fail statements
+		 //closing the report
 	}
+	
+	
 
 	@AfterSuite
-	public void afterSuite() {	
+	public void afterSuite() throws InterruptedException {	
+		extentReports.flush(); 
+		log.info("Closing extent reports");
 		System.out.println("This is After Suite Method");
+		Thread.sleep(5000);
+		log.info("Browser is closing");
+		driver.quit();
 	}
 	/*
 	@BeforeTest
@@ -86,7 +114,7 @@ public class TestBase extends commonObjects{
 			System.setProperty("webdriver.chrome.driver", browserPathChrome);
 			ChromeOptions options=new ChromeOptions();
 			options.addArguments("--start-maximized");
-//			options.addArguments("--disable-popup-blocking");
+			//			options.addArguments("--disable-popup-blocking");
 			options.setCapability("pageLoadStrategy", "none");
 			driver=new ChromeDriver(options);
 		}else
@@ -121,7 +149,7 @@ public class TestBase extends commonObjects{
 
 	@AfterClass
 	public void afterClass() {
-//		driver.quit();  //close the browser
+		//		driver.quit();  //close the browser
 		System.out.println("This is After Class Method");
 	}
 

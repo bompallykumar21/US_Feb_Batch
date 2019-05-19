@@ -1,5 +1,7 @@
 package TestCasesUsingpageObjectModels;
 
+import java.io.IOException;
+
 import org.apache.log4j.Logger;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.Keys;
@@ -15,13 +17,14 @@ public class popUpMessages extends TestBase{
 	String url="https://mail.rediff.com/cgi-bin/login.cgi";
 
 	@Test
-	public void rediff() throws InterruptedException{
+	public void rediff() throws InterruptedException, IOException{
 		log = Logger.getLogger("Rediff");
 		enterURL(url);	
 		RediffHomePage homePage=new RediffHomePage();
 		homePage.getBtnGo().click();
 		Thread.sleep(3000);
 		Alert alert=driver.switchTo().alert();
+		
 		String popUpMessage=alert.getText();
 		log.info(popUpMessage);
 //		alert.accept();

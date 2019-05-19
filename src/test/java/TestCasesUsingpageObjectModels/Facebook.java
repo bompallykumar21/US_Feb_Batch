@@ -1,5 +1,7 @@
 package TestCasesUsingpageObjectModels;
 
+import java.io.IOException;
+
 import org.apache.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -12,11 +14,13 @@ public class Facebook extends TestBase {
 	String url="https://www.facebook.com";
 
 	@Test
-	public void SignUpFaceBook(){
+	public void SignUpFaceBook() throws IOException, InterruptedException{
 		log = Logger.getLogger("Facebook SignUp");
 		enterURL(url);
 		String pageTitle = driver.getTitle();
 		//comparing expected with actual
+		Thread.sleep(4000);
+		takeScreenshot(driver, "rediff");
 		Assert.assertEquals("Facebook – log in or sign up ", pageTitle, "Expected and Actual are not same");
 		Assert.assertTrue(pageTitle.contains("Facebook"), "Page title does not contain Facebook text");
 		log.info("Expected Title and Actual Title are same");
@@ -25,6 +29,7 @@ public class Facebook extends TestBase {
 		log.info("First Name field value is entered");
 		homePage.getTxtSurname().sendKeys("SurName");
 		log.info("Sur Name field value is entered");
+		
 
 	}
 }
