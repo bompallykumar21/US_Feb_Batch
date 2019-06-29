@@ -33,7 +33,7 @@ public class TestBase extends commonObjects{
 		initializeProperties();
 		initializeExtentReports();
 	}
-	
+
 	public static void initializelog4j() {
 		String log4jConfPath = "log4j.properties";
 		PropertyConfigurator.configure(log4jConfPath);
@@ -61,7 +61,7 @@ public class TestBase extends commonObjects{
 		env=prpt.getProperty("environment");
 		url=prpt.getProperty("url");
 	}
-	
+
 	public void initializeExtentReports() {
 		String extentReportPath=System.getProperty("user.dir")+"/ExtentReports/"+"Report1.html";
 		extentReports=new ExtentReports();
@@ -74,11 +74,11 @@ public class TestBase extends commonObjects{
 		extentReports.setSystemInfo("Project Name", "Selenium Training");
 		extentReports.setSystemInfo("Executor", "Arun");
 		extentReports.setSystemInfo("Reviewer", "Gopi");
-//		extentTest=extentReports.createTest("TestCase1");   //creating test case to enter log details pass/fail statements
-		 //closing the report
+		//		extentTest=extentReports.createTest("TestCase1");   //creating test case to enter log details pass/fail statements
+		//closing the report
 	}
-	
-	
+
+
 
 	@AfterSuite
 	public void afterSuite() throws InterruptedException {	
@@ -116,7 +116,11 @@ public class TestBase extends commonObjects{
 			options.addArguments("--start-maximized");
 			//			options.addArguments("--disable-popup-blocking");
 			options.setCapability("pageLoadStrategy", "none");
+			options.addArguments("disable-infobars");
+			options.addArguments("headless");  //to open browser in headless mode
 			driver=new ChromeDriver(options);
+
+
 		}else
 			if(browserValue.equalsIgnoreCase("ie")) {
 				String browserPathIE="./drivers/IEDriverServer.exe";
